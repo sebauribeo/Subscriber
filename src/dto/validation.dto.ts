@@ -11,7 +11,7 @@ export class ValidationDTO{
         this.commercialName = data.commercialName;
         this.photoUrls = data.photoUrls;
         this.status = data.status
-    }
+    };
 
     @IsNotEmpty()
     @IsNumber()
@@ -42,4 +42,4 @@ export class ValidationDTO{
     status: string;
 
     data:any;
-}
+};

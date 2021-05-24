@@ -15,7 +15,7 @@ export class PubSubService {
       projectId: this.projectId,
       credentials: credentialJson,
     });
-  }
+  };
 
   private projectId = process.env.GCLOUD_PROJECT_ID;
   private topicName = process.env.GCLOUD_TOPIC_NAME;
@@ -27,5 +27,5 @@ export class PubSubService {
     const dataBuffer = Buffer.from(JSON.stringify(data));
     const messageId = await this.pubSubClient.topic(this.topicName).publish(dataBuffer);
     this.logger.customInfo({}, { [`Massage published in ${this.topicName}`]: messageId });
-  }
-}
+  };
+};

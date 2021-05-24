@@ -37,5 +37,5 @@ export class AllExceptionsFilter extends BaseExceptionFilter {
         statusDescription,
         url,
       });
-  }
-}
+  };
+};

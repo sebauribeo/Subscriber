@@ -16,7 +16,7 @@ export class PubSubServer extends Server implements CustomTransportStrategy {
       projectId: this.projectId,
       credentials: credentialJson, 
     });
-  }
+  };
 
   private projectId = process.env.GCLOUD_PROJECT_ID;
   private subscription = process.env.GCLOUD_SUBSCRIPTION_NAME;
@@ -34,13 +34,13 @@ export class PubSubServer extends Server implements CustomTransportStrategy {
     Promise.all(subscribeAll)
       .then(() => callback())
       .catch(e => this.handleError(e));
-  }
+  };
 
   close() {
     Object.values(this.subscriptions).forEach(sub => {
       sub.close().catch(e => this.handleError(e));
     });
-  }
+  };
 
   protected handleError(error: any) {
     if (isError(error)) {
@@ -48,7 +48,7 @@ export class PubSubServer extends Server implements CustomTransportStrategy {
     } else {
       super.handleError(error);
     }
-  }
+  };
 
   private async subscribe(subId: string): Promise<void> {
     const subscription = this.subscription;
@@ -61,7 +61,7 @@ export class PubSubServer extends Server implements CustomTransportStrategy {
     sub.on('error', e => this.handleError(e));
 
     this.subscriptions[subId] = sub;
-  }
+  };
 
   private getMessageHandler(subId: string): MessageHandler {
     return async (message: Message) => {
@@ -73,7 +73,7 @@ export class PubSubServer extends Server implements CustomTransportStrategy {
       }
       await handler(message);
     };
-  }
+  };
 
   private async getSubscription(subscription: string): Promise<Subscription> {
     const sub = this.client.subscription(subscription, {
@@ -82,5 +82,5 @@ export class PubSubServer extends Server implements CustomTransportStrategy {
       }
     });
     return sub;
-  }
-}
+  };
+};

@@ -12,7 +12,7 @@ export class AppController {
   constructor(
     private loggerService: LoggerService,
     private redisService: RedisService,
-    ){}
+    ){};
   
 
   @EventPattern(process.env.GCLOUD_SUBSCRIPTION_NAME)
