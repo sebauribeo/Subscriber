@@ -27,7 +27,7 @@ export class AppController {
 
       const validation = await validate(result);
       if (validation.length === 0) {
-        await this.redisService.postData(validationResult.id.toString(), JSON.stringify(validationResult));
+        await this.redisService.saveData(validationResult.id.toString(), JSON.stringify(validationResult));
         this.loggerService.customInfo({}, { 'Susbcribed message had been consumed': message.id });
         message.ack();
       } else {

@@ -13,7 +13,7 @@ export class ValidationDTO{
         this.status = data.status
     }
 
-
+    @IsNotEmpty()
     @IsNumber()
     id: number;
 
@@ -21,12 +21,15 @@ export class ValidationDTO{
     @IsString()
     name: string;
 
+    @IsNotEmpty()
     @IsString()
     description: string;
-
+    
+    @IsNotEmpty()
     @IsNumber()
     price: number;
 
+    @IsNotEmpty()
     @IsString()
     commercialName: string;
 
