@@ -33,6 +33,7 @@
     "dotenv": "^8.2.0",
     "moment-timezone": "^0.5.33",
     "npmlog": "^4.1.2",
+    "redis-commander": "^0.7.0",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^6.6.6"

@@ -3,8 +3,8 @@ import { Injectable } from '@nestjs/common';
 const asyncRedis = require("async-redis");
 const client = asyncRedis.createClient();
  
-client.on("error", function (err) {
-    console.log("Error " + err);
+client.on("error", function (error) {
+    console.log("Error " + error);
 });
 
 @Injectable()

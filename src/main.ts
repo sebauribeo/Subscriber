@@ -6,6 +6,7 @@ import { AppModule } from './app.module';
 import { PubSubServer } from './services/transports/pubSub/pubSub.server';
 import { AllExceptionsFilter } from './exception-filters/all-exceptions.filter';
 
+
 async function bootstrap() {
   const logger = new Logger();
 
@@ -19,8 +20,9 @@ async function bootstrap() {
   app.useGlobalFilters(new AllExceptionsFilter(httpAdapter));
 
   await app.startAllMicroservicesAsync();
-  const port = process.env.PORT || 5005;
+  const port = process.env.PORT;
   await app.listen(port);
   logger.log(`Server Start Port ${port}`);
 }
 bootstrap();
+

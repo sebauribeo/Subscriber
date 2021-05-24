@@ -1,4 +1,4 @@
-import { IsEnum, IsNotEmpty, IsNumber, IsString } from "class-validator";
+import { IsBoolean, IsDefined, IsEnum, IsNotEmpty, IsNumber, IsString } from "class-validator";
 
 export class ValidationDTO{
     constructor(
@@ -13,7 +13,7 @@ export class ValidationDTO{
         this.status = data.status
     }
 
-    @IsNotEmpty()
+
     @IsNumber()
     id: number;
 
@@ -21,27 +21,22 @@ export class ValidationDTO{
     @IsString()
     name: string;
 
-    @IsNotEmpty()
     @IsString()
     description: string;
 
-    @IsNotEmpty()
     @IsNumber()
     price: number;
 
-    @IsNotEmpty()
     @IsString()
     commercialName: string;
 
-    @IsNotEmpty()
     @IsString({each: true})
     photoUrls: Array<string>;
 
-    @IsNotEmpty()
     @IsEnum(["available", "pending", "sold"],{
         message: 'Status is not valid [available, pending, sold]'
     })
     status: string;
 
-    data:any
-};
+    data:any;
+}
