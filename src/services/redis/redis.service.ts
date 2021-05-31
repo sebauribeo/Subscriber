@@ -10,11 +10,11 @@ redisClient.on("error", function (error: string) {
 @Injectable()
 export class RedisService {
     async saveData(key: any, value: any){
-        try {
-            const data: string = await redisClient.set(key, value);  
-            return JSON.parse(data);
-        } catch (error) {
-            return null;
-        };
+        const data: any = await redisClient.set(key, value);
+        if (key && value === redisClient){
+            return JSON.parse(data)
+        } else {
+            return (Error);
+        }
     };
 };

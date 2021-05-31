@@ -16,7 +16,6 @@ export class AppController {
   
   @EventPattern(process.env.GCLOUD_SUBSCRIPTION_NAME)
   async messageHandler(message: Message){
-    try {
       const data = message.data ? message.data.toString() : null;
       this.loggerService.customInfo({}, { 'Data from the server': circularJSON.parse(data) });
       const validationResult: ValidationDTO = JSON.parse(data); 
@@ -31,8 +30,5 @@ export class AppController {
         this.loggerService.customError(null, validation);
         this.loggerService.customError({}, { 'The Subscribed Message is invalid': message.id });
       };
-    } catch (error) {
-      this.loggerService.customError(null, (error.response) ? error.response.data : error.message);
-    };
   };
 };

@@ -6,7 +6,7 @@ import { AppModule } from './app.module';
 import { PubSubServer } from './services/transports/pubSub/pubSub.server';
 import { AllExceptionsFilter } from './exception-filters/all-exceptions.filter';
 
-async function bootstrap() {
+async function bootstrap() { 
   const logger = new Logger();
 
   const app = await NestFactory.create(AppModule);
