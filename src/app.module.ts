@@ -8,6 +8,6 @@ import { RedisService } from "./services/redis/redis.service";
 @Module({
   imports: [],
   controllers: [AppController],
-  providers: [AppService, PubSubService, LoggerService, RedisService], 
+  providers: [AppService, RedisService, LoggerService, PubSubService], 
 })
 export class AppModule {}

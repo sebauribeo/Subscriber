@@ -1,7 +1,6 @@
 import { Controller } from '@nestjs/common';
 import { LoggerService } from "./services/logger/logger.service";
 import { ValidationDTO } from "./dto/validation.dto";
-import { validate } from 'class-validator';
 import { Message } from '@google-cloud/pubsub';
 import * as circularJSON from "circular-json";
 import { EventPattern } from '@nestjs/microservices';
@@ -14,21 +13,15 @@ export class AppController {
     private redisService: RedisService,
     ){};
   
-  @EventPattern(process.env.GCLOUD_SUBSCRIPTION_NAME)
-  async messageHandler(message: Message){
-      const data = message.data ? message.data.toString() : null;
-      this.loggerService.customInfo({}, { 'Data from the server': circularJSON.parse(data) });
-      const validationResult: ValidationDTO = JSON.parse(data); 
-      const result = new ValidationDTO(validationResult);
-      
-      const validation = await validate(result);
-      if (validation.length === 0) {
+    @EventPattern(process.env.GCLOUD_SUBSCRIPTION_NAME)
+    async messageHandler(message: Message){
+        const data = message.data ? message.data.toString() : null;
+        const validationResult: ValidationDTO = JSON.parse(data); 
+
+        this.loggerService.customInfo({}, { 'Data from the server...': circularJSON.parse(data) });
+        this.loggerService.customInfo({}, { 'Data send to Redis!...': message.id });
         await this.redisService.saveData(validationResult.id.toString(), JSON.stringify(validationResult));
-        this.loggerService.customInfo({}, { 'The subscribed message has been consumed': message.id });
+
         message.ack();
-      } else {
-        this.loggerService.customError(null, validation);
-        this.loggerService.customError({}, { 'The Subscribed Message is invalid': message.id });
-      };
-  };
-};
+    };
+}; 
