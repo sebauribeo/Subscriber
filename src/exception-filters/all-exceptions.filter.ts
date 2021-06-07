@@ -13,12 +13,12 @@ export class AllExceptionsFilter extends BaseExceptionFilter {
     const response = ctx.getResponse();
     const request = ctx.getRequest();
 
-    const error: Record<string, any> = (exception instanceof HttpException) ? exception.getResponse() : (exception.message) ? exception.message : exception;
-    this.logger.customError(request.headers, error);
+    const httpException = (exception instanceof HttpException) ? exception.getResponse() : null;
+    const error: Record<string, any> = (httpException) ? exception.response.data || exception.response.message : exception.message || exception;
+    this.logger.error(request.headers, error);
 
-    const status = exception.status
-      || (exception.response) ? exception.response.status
-      || exception.response.statusCode : HttpStatus.INTERNAL_SERVER_ERROR;
+    const status = (exception.response) ? exception.response.status || exception.response.statusCode || exception.status
+      || HttpStatus.INTERNAL_SERVER_ERROR : (exception.status) ? exception.status : HttpStatus.INTERNAL_SERVER_ERROR;
     let statusDescription = '';
     let url = '';
     if (this.environment === 'production') {
@@ -27,8 +27,8 @@ export class AllExceptionsFilter extends BaseExceptionFilter {
           status,
           statusDescription,
         });
-    };
-    statusDescription = JSON.stringify(error);
+    }
+    statusDescription = (exception.response) ? error : exception.message;
     url = request.url;
 
     return response.status(status)
@@ -38,4 +38,4 @@ export class AllExceptionsFilter extends BaseExceptionFilter {
         url,
       });
   };
-};
+}; 

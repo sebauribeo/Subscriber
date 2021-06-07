@@ -26,6 +26,6 @@ export class PubSubService {
   async publisher(data: any) {
     const dataBuffer = Buffer.from(JSON.stringify(data));
     const messageId = await this.pubSubClient.topic(this.topicName).publish(dataBuffer);
-    this.logger.customInfo({}, { [`Massage published in ${this.topicName}`]: messageId });
+    this.logger.info({}, { [`Massage published in ${this.topicName}`]: messageId });
   };
 };

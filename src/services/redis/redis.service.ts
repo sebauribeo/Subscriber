@@ -18,13 +18,13 @@ export class RedisService {
         const data: any = await redisClient.set(key, value);
 
         if (!data){
-            this.loggerService.customError({}, {message: 'Data Error!...', id: key});
+            this.loggerService.error({}, {message: 'Data Error!...', id: key});
             throw new HttpException({
                 status: HttpStatus.NOT_FOUND,
                 error: 'Data Redis Not Found',
             }, HttpStatus.NOT_FOUND);
         } else {
-            this.loggerService.customInfo({}, { message: 'The subscribed message has been consumed...' });
+            this.loggerService.info({}, { message: 'The subscribed message has been consumed...' });
             return (data)
         };
     };

@@ -5,7 +5,7 @@ import { Message } from '@google-cloud/pubsub';
 import * as circularJSON from "circular-json";
 import { EventPattern } from '@nestjs/microservices';
 import { RedisService } from "./services/redis/redis.service";
-import { validate } from 'class-validator';
+import { validate } from 'class-validator'; 
 
 @Controller()
 export class AppController {
@@ -24,14 +24,14 @@ export class AppController {
         const validation = await validate(result);
         
         if (validation.length === 0) {
-          this.loggerService.customInfo({}, { 'Data send to Redis, id': message.id });
-          this.loggerService.customInfo({}, { 'Data from the server...': circularJSON.parse(data)});
+          this.loggerService.info({}, { 'Data send to Redis, id': message.id });
+          this.loggerService.info({}, { 'Data from the server...': circularJSON.parse(data)});
           await this.redisService.saveData(validationResult.id.toString(), JSON.stringify(validationResult));
           message.ack();
 
         } else {
-          this.loggerService.customError({}, {message: 'Validation failed!...'});
-          this.loggerService.customError(null, validation);
+          this.loggerService.error({}, {message: 'Validation failed!...'});
+          this.loggerService.error(null, validation);
           throw new HttpException({
             status: HttpStatus.INTERNAL_SERVER_ERROR,
             statusMessage: 'Data not found!...'
@@ -44,5 +44,4 @@ export class AppController {
         }, HttpStatus.INTERNAL_SERVER_ERROR);
       };
     }; 
-
 }; 
