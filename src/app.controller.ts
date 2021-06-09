@@ -12,36 +12,28 @@ export class AppController {
   constructor(
     private loggerService: LoggerService,
     private redisService: RedisService,
-    ){};
+  ){};
     
-    @EventPattern(process.env.GCLOUD_SUBSCRIPTION_NAME)
-    async messageHandler(message: Message){
+  @EventPattern(process.env.GCLOUD_SUBSCRIPTION_NAME)
+  async messageHandler(message: Message){
 
-      try {
-        const data = message.data ? message.data.toString() : null;
-        const validationResult: ValidationDTO = JSON.parse(data); 
-        const result = new ValidationDTO(validationResult);
-        const validation = await validate(result);
-        
-        if (validation.length === 0) {
-          this.loggerService.info({}, { 'Data send to Redis, id': message.id });
-          this.loggerService.info({}, { 'Data from the server...': circularJSON.parse(data)});
-          await this.redisService.saveData(validationResult.id.toString(), JSON.stringify(validationResult));
-          message.ack();
-
-        } else {
-          this.loggerService.error({}, {message: 'Validation failed!...'});
-          this.loggerService.error(null, validation);
-          throw new HttpException({
-            status: HttpStatus.INTERNAL_SERVER_ERROR,
-            statusMessage: 'Data not found!...'
-          }, HttpStatus.INTERNAL_SERVER_ERROR);
-        };
-      } catch (error) {
+    try {
+      const data = message.data ? message.data.toString() : null;
+      const validationResult: ValidationDTO = JSON.parse(data); 
+      const result = new ValidationDTO(validationResult);
+      const validation = await validate(result);
+      
+      if (!validation) {
+        this.loggerService.error(null, validation);
         throw new HttpException({
-          status: HttpStatus.INTERNAL_SERVER_ERROR,
-          statusMessage: 'Data not found!...'
-        }, HttpStatus.INTERNAL_SERVER_ERROR);
+          status: HttpStatus.CONFLICT,
+        }, HttpStatus.CONFLICT);
+      } else {
+        this.loggerService.info({}, { 'The subscribed message has been consumed...': message.id });
+        this.loggerService.info({}, { 'Data from the server...': circularJSON.parse(data)});
+        await this.redisService.saveData(validationResult.id.toString(), JSON.stringify(validationResult));
+        message.ack();
       };
-    }; 
+    } catch (error) {};
+  }; 
 }; 

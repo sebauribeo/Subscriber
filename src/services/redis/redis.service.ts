@@ -20,11 +20,10 @@ export class RedisService {
         if (!data){
             this.loggerService.error({}, {message: 'Data Error!...', id: key});
             throw new HttpException({
-                status: HttpStatus.NOT_FOUND,
-                error: 'Data Redis Not Found',
-            }, HttpStatus.NOT_FOUND);
+                status: HttpStatus.CONFLICT,
+            }, HttpStatus.CONFLICT);
         } else {
-            this.loggerService.info({}, { message: 'The subscribed message has been consumed...' });
+            this.loggerService.info({}, { message: 'Data send to Redis' });
             return (data)
         };
     };
